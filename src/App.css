@@ -1,6 +1,35 @@
+body {height: 100%;}
+input{
+  height: 60px;
+}
+footer{
+  position: fixed; 
+  bottom: 0; 
+  width: 100%; 
+  background-color: #333; 
+  color: #fff; 
+  padding: 10px; 
+
+}
+#row1{
+  background-color: #61dafb;
+max-width:500px ;
+}
 .App {
   text-align: center;
 }
+#fullScreen{
+  height: 100%;
+}
+#SearchPng {
+  width: 30px;
+  height: 30px; 
+  transition: all 0.5s ease; 
+}
+
+#SearchPng:hover {
+  width: 40px; 
+  height: 40px; }
 
 .App-logo {
   height: 40vmin;

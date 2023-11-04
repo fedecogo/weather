@@ -1,23 +1,16 @@
-import logo from './logo.svg';
+
 import './App.css';
+import MyNavBar from './comp/MyNavBar';
+import MyFooter from './comp/MyFooter';
+import MyHome from './comp/MyHome';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='d-flex flex-column '>
+        <MyNavBar />
+        <MyHome className='flex-grow-1 '/> 
+        <MyFooter/>
     </div>
   );
 }
