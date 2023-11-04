@@ -1,31 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import SearchPng from '../assets/—Pngtree—search vector icon with transparent_5156942.png';
 
 function WeatherApp() {
   const [city, setCity] = useState('Milano');
   const [weatherData, setWeatherData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=60d5b2e652a7974548a20cbab5147ccc`)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error('Problema nel recupero dei dati');
-        }
-      })
-      .then((data) => {
-        const temperatureInCelsius = data.main.temp - 273.15;
-        data.main.temp = temperatureInCelsius;
-        setWeatherData(data);
-        console.log(data)
-      })
-      .catch((error) => {
-        console.error('Errore nella fetch', error);
-      });
+    const fetchData = () => {
+      fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=60d5b2e652a7974548a20cbab5147ccc`)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error('Problema nel recupero dei dati');
+          }
+        })
+        .then((data) => {
+          const temperatureInCelsius = data.main.temp - 273.15;
+          const minTemperatureInCelsius = data.main.temp_min - 273.15;
+          const maxTemperatureInCelsius = data.main.temp_max - 273.15;
+          data.main.temp = temperatureInCelsius;
+          data.main.temp_min = minTemperatureInCelsius;
+          data.main.temp_max = maxTemperatureInCelsius;
+          setWeatherData(data);
+          setIsLoading(false);
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Errore nella fetch', error);
+          setIsLoading(false);
+        });
+    };
+
+    // Ritardare il caricamento di 500 millisecondi
+    const timeout = setTimeout(fetchData, 500);
+
+    return () => clearTimeout(timeout); // Pulire il timeout se il componente viene smontato
   }, [city]);
 
   const handleCityChange = (event) => {
@@ -33,22 +45,37 @@ function WeatherApp() {
   };
 
   return (
-    <Container className='d-flex align-items-center justify-content-center' id='fullScreen'>
-      <Row id='row1'>
-        <Col xs={12} className='d-flex align-items-center justify-content-evenly' id='topBar'>
-          <input type='text' className='cityinput' placeholder='Cerca Una Città' value={city} onChange={handleCityChange} />
-          <div>
-            <img src={SearchPng} alt='' id='SearchPng' />
+    <div className='d-flex justify-content-center ' id='fullScreen'>
+      <Row id='row1' className='mt-3 mb-5'>
+        {isLoading ? (
+          <div className="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
-        </Col>
-        <Col xs={12} className='d-flex align-items-center justify-content-center'>
-          {weatherData ? weatherData.name : 'CityName'}
-        </Col>
-        <Col xs={12} className='d-flex align-items-center justify-content-center'>
-          {weatherData ? `Temperatura: ${weatherData.main.temp.toFixed(2)}°C` : 'Temperatura in gradi'}
-        </Col>
+        ) : (
+          <>
+            <Col xs={12} className='d-flex align-items-center justify-content-evenly' id='topBar'>
+              <input type='text' className='cityinput' placeholder='Cerca Una Città' value={city} onChange={handleCityChange} />
+            </Col>
+            <Col xs={12} className='d-flex align-items-center justify-content-center'>
+              {weatherData ? weatherData.name : 'CityName'}
+            </Col>
+            <Col xs={12} className='d-flex align-items-center justify-content-center'>
+              {weatherData ? `Temperatura media : ${weatherData.main.temp.toFixed(2)}°C` : 'Temperatura in gradi'}
+              {weatherData && (
+                <img src={`https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`} alt="Weather Icon" />
+              )}
+            </Col>
+            <Col>{weatherData ? `Temperatura min : ${weatherData.main.temp_min.toFixed(2)}°C` : 'Temperatura in gradi'}</Col>
+            <Col>{weatherData ? `Temperatura max : ${weatherData.main.temp_max.toFixed(2)}°C` : 'Temperatura in gradi'}</Col>
+          </>
+        )}
       </Row>
-    </Container>
+    </div>
   );
 }
 

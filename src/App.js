@@ -9,7 +9,7 @@ function App() {
   return (
     <div className='d-flex flex-column '>
         <MyNavBar />
-        <MyHome className='flex-grow-1 '/> 
+        <MyHome /> 
         <MyFooter/>
     </div>
   );
