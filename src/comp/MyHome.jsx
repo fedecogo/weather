@@ -34,7 +34,7 @@ function WeatherApp() {
         });
     };
 
-    const timeout = setTimeout(fetchData, 500);
+    const timeout = setTimeout(fetchData, 1500);
     return () => clearTimeout(timeout)
   }, [city]);
 
@@ -59,22 +59,25 @@ function WeatherApp() {
         ) : (
           <>
           <Row>
-            <Col xs={6} className='d-flex align-items-center justify-content-evenly' id='topBar'>
+            <Col md={12} className='d-flex align-items-center justify-content-evenly ' id='topBar'>
               <input type='text' className='cityinput' placeholder='Cerca Una Città' value={city} onChange={handleCityChange} />
             </Col>
-            <Col xs={2} className='d-flex align-items-center justify-content-center'>
-              {weatherData ? weatherData.name : 'CityName'}</Col>
-            <Col xs={2}> {weatherData ? weatherData.sys.country : 'Country'}</Col>
-            <Col xs={2}> {weatherData && (
-                <img src={`https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`} alt="Weather Icon" />
-              )}</Col></Row><Row>
-            <Col xs={12} className='d-flex align-items-center justify-content-center'>
+            <Col id='min' md={12} className='d-flex align-items-center justify-content-center ssss'>
+              <div> {weatherData ? weatherData.name : 'CityName'}</div>
+              <div className='ms-2'>{weatherData ? weatherData.sys.country : 'Country'}</div>
+              <div>{weatherData && (
+                <img id='SearchPng' src={`https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`} alt="Weather Icon" />
+              )}
+              </div>
+            </Col>
+         
+            <Col xs={12} className='d-flex align-items-center justify-content-center ssss'>
               {weatherData ? `Temperatura media : ${weatherData.main.temp.toFixed(2)}°C` : 'Temperatura in gradi'}
              
-            </Col></Row>
-            <Row>
-            <Col>{weatherData ? `Temperatura min : ${weatherData.main.temp_min.toFixed(2)}°C` : 'Temperatura in gradi'}</Col>
-            <Col>{weatherData ? `Temperatura max : ${weatherData.main.temp_max.toFixed(2)}°C` : 'Temperatura in gradi'}</Col></Row>
+            </Col>
+           
+            <Col className='ssss mb-5 '>{weatherData ? `Temperatura min : ${weatherData.main.temp_min.toFixed(2)}°C` : 'Temperatura in gradi'}</Col>
+            <Col className='ssss mb-5'>{weatherData ? `Temperatura max : ${weatherData.main.temp_max.toFixed(2)}°C` : 'Temperatura in gradi'}</Col></Row>
           </>
         )}
       </Row>
