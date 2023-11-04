@@ -34,10 +34,8 @@ function WeatherApp() {
         });
     };
 
-    // Ritardare il caricamento di 500 millisecondi
     const timeout = setTimeout(fetchData, 500);
-
-    return () => clearTimeout(timeout); // Pulire il timeout se il componente viene smontato
+    return () => clearTimeout(timeout)
   }, [city]);
 
   const handleCityChange = (event) => {
@@ -48,6 +46,7 @@ function WeatherApp() {
     <div className='d-flex justify-content-center ' id='fullScreen'>
       <Row id='row1' className='mt-3 mb-5'>
         {isLoading ? (
+          <div className="spazio_per_spinner">
           <div className="spinner">
             <div></div>
             <div></div>
@@ -56,22 +55,26 @@ function WeatherApp() {
             <div></div>
             <div></div>
           </div>
+          </div>
         ) : (
           <>
-            <Col xs={12} className='d-flex align-items-center justify-content-evenly' id='topBar'>
+          <Row>
+            <Col xs={6} className='d-flex align-items-center justify-content-evenly' id='topBar'>
               <input type='text' className='cityinput' placeholder='Cerca Una Città' value={city} onChange={handleCityChange} />
             </Col>
-            <Col xs={12} className='d-flex align-items-center justify-content-center'>
-              {weatherData ? weatherData.name : 'CityName'}
-            </Col>
+            <Col xs={2} className='d-flex align-items-center justify-content-center'>
+              {weatherData ? weatherData.name : 'CityName'}</Col>
+            <Col xs={2}> {weatherData ? weatherData.sys.country : 'Country'}</Col>
+            <Col xs={2}> {weatherData && (
+                <img src={`https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`} alt="Weather Icon" />
+              )}</Col></Row><Row>
             <Col xs={12} className='d-flex align-items-center justify-content-center'>
               {weatherData ? `Temperatura media : ${weatherData.main.temp.toFixed(2)}°C` : 'Temperatura in gradi'}
-              {weatherData && (
-                <img src={`https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`} alt="Weather Icon" />
-              )}
-            </Col>
+             
+            </Col></Row>
+            <Row>
             <Col>{weatherData ? `Temperatura min : ${weatherData.main.temp_min.toFixed(2)}°C` : 'Temperatura in gradi'}</Col>
-            <Col>{weatherData ? `Temperatura max : ${weatherData.main.temp_max.toFixed(2)}°C` : 'Temperatura in gradi'}</Col>
+            <Col>{weatherData ? `Temperatura max : ${weatherData.main.temp_max.toFixed(2)}°C` : 'Temperatura in gradi'}</Col></Row>
           </>
         )}
       </Row>
