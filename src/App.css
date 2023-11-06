@@ -17,6 +17,9 @@
    letter-spacing: 5px;
    z-index: 1;
 }
+.nomeBig{
+  font-size: 60px;
+}
 
 .glitch:before,
 .glitch:after {
